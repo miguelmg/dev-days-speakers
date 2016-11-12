@@ -57,17 +57,12 @@ namespace DevDaysSpeakers.ViewModel
             {
                 IsBusy = true;
 
-                using (var client = new HttpClient())
-                {
-                    //grab json from server
-                    var json = await client.GetStringAsync("http://demo4404797.mockable.io/speakers");
-                    var items = JsonConvert.DeserializeObject<List<Speaker>>(json);
+                var service = DependencyService.Get<AzureService>();
+                var items = await service.GetSpeakers();
 
-                    //Speakers.clear();
-                    foreach (var item in items)
-                        Speakers.Add(item);
-
-                }
+                Speakers.Clear();
+                foreach (var item in items)
+                    Speakers.Add(item);
 
             }
             catch (Exception ex)
